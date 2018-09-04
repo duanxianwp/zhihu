@@ -5,8 +5,13 @@
 # See documentation in:
 # https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 import json
+import random
+import time
 
 from scrapy import signals
+from scrapy.downloadermiddlewares.retry import RetryMiddleware
+from scrapy.utils.response import response_status_message
+
 from zhihu.tools import ipTools
 
 
@@ -110,5 +115,26 @@ class HttpProxyMiddleware(object):
     def process_request(self, request, spider):
         ip_text = ipTools.get_ip().replace("'", '"')
         item = json.loads(ip_text)
-        print(str(item))
         request.meta["proxy"] = "http://" + item['ip'] + ":" + item['port']
+
+
+class MyRetryMiddleware(RetryMiddleware):
+    # logger = logging.getLogger(__name__)
+    def delete_proxy(self, proxy):
+        if proxy:
+            pass
+
+    def process_response(self, request, response, spider):
+        if request.meta.get('dont_retry', False):
+            return response
+        if response.status in self.retry_http_codes:
+            reason = response_status_message(response.status)
+            time.sleep(random.randint(3, 5))
+            return self._retry(request, reason, spider) or response
+        return response
+
+    def process_exception(self, request, exception, spider):
+        if isinstance(exception, self.EXCEPTIONS_TO_RETRY) \
+                and not request.meta.get('dont_retry', False):
+            time.sleep(random.randint(3, 5))
+            return self._retry(request, exception, spider)
