@@ -45,12 +45,13 @@ DEFAULT_REQUEST_HEADERS = {
 }
 
 # Enable or disable spider middlewares
-# See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 SPIDER_MIDDLEWARES = {
     # 'zhihu.middlewares.ZhihuSpiderMiddleware': 543,
-    'zhihu.middlewares.MyRetryMiddleware': 542,
-    'zhihu.middlewares.HttpProxyMiddleware': 543
+    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
+    'zhihu.middlewares.HttpProxyMiddleware': 109,
+    'zhihu.middlewares.MyRetryMiddleware': 108
 }
+# See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
@@ -95,6 +96,8 @@ MONGO_URI = 'localhost'
 MONGO_DATABASE = 'zhihu'
 
 # 获取ip的url
-IP_POOL_GET_URL = "http://ip.wanpeng123.cn/api"
+IP_POOL_GET_URL = "http://ip.wanpeng123.cn/get"
+# 删除ip的url
+IP_POOL_DEL_URL = "http://ip.wanpeng123.cn/del"
 # 重试码
 RETRY_HTTP_CODES = [403, 500, 404]
