@@ -26,7 +26,7 @@ ROBOTSTXT_OBEY = False
 # Configure a delay for requests for the same website (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-# DOWNLOAD_DELAY = 3
+DOWNLOAD_DELAY = 1
 # The download delay setting will honor only one of:
 # CONCURRENT_REQUESTS_PER_DOMAIN = 16
 # CONCURRENT_REQUESTS_PER_IP = 16
@@ -44,21 +44,22 @@ DEFAULT_REQUEST_HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36'
 }
 
-# Enable or disable spider middlewares
 SPIDER_MIDDLEWARES = {
     # 'zhihu.middlewares.ZhihuSpiderMiddleware': 543,
-    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
-    'zhihu.middlewares.HttpProxyMiddleware': 109,
-    'zhihu.middlewares.MyRetryMiddleware': 108
+    'zhihu.middlewares.MyRetryMiddleware': 300
 }
+# Enable or disable spider middlewares
 # See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
 # Enable or disable downloader middlewares
-# See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
 
-    'zhihu.middlewares.ZhihuDownloaderMiddleware': 123,
+    #proxy IP 中间件
+    # 'zhihu.middlewares.HttpProxyMiddleware': 100,
+    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 200,
+    'zhihu.middlewares.ZhihuDownloaderMiddleware': 300,
 }
+# See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
@@ -96,8 +97,8 @@ MONGO_URI = 'localhost'
 MONGO_DATABASE = 'zhihu'
 
 # 获取ip的url
-IP_POOL_GET_URL = "http://ip.wanpeng123.cn/get"
+IP_POOL_GET_URL = "http://ip/get"
 # 删除ip的url
-IP_POOL_DEL_URL = "http://ip.wanpeng123.cn/del"
+IP_POOL_DEL_URL = "http://ip/del"
 # 重试码
 RETRY_HTTP_CODES = [403, 500, 404]

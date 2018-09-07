@@ -127,9 +127,7 @@ class MyRetryMiddleware(RetryMiddleware):
     def process_response(self, request, response, spider):
         if request.meta.get('dont_retry', False):
             return response
-        print("xxxxx-->"+response.status)
         if response.status in self.retry_http_codes:
-            print(response.status+"------>" + request.meta['proxy'])
             reason = response_status_message(response.status)
             time.sleep(random.randint(3, 5))
             return self._retry(request, reason, spider) or response
