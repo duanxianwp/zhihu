@@ -20,8 +20,9 @@ class ZhihuwordSpider(scrapy.Spider):
     a_include = 'data[*].is_normal,admin_closed_comment,reward_info,is_collapsed,annotation_action,annotation_detail,collapse_reason,collapsed_by,suggest_edit,comment_count,can_comment,content,voteup_count,reshipment_settings,comment_permission,mark_infos,created_time,updated_time,review_info,question,excerpt,relationship.is_authorized,voting,is_author,is_thanked,is_nothelp;data[*].author.badge[?(type=best_answerer)].topic'
 
     def start_requests(self):
-        # MongoTools.get_collect_task()
-        token = 'liaoxuefeng'
+        token = MongoTools.get_collect_task()
+        if token is None:
+            return
         self.url_token = token
         yield scrapy.Request(url=self.question_url.format(token, self.q_include, 0), callback=self.parse_question)
         yield scrapy.Request(url=self.answer_url.format(token, self.a_include, 0), callback=self.parse_answer)
