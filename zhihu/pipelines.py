@@ -32,7 +32,7 @@ class MongoPipeline(object):
     def close_spider(self, spider):
         if self.url_token is not None:
             # 进行采集任务task 状态变更
-            self.db['collect_task'].update({'token': self.url_token}, {'$set': {'status': "ANLAYZE_WAIT"}})
+            self.db['collect_task'].update({'token': self.url_token}, {'$set': {'status': "ANALYZE_WAIT"}})
         self.client.close()
 
     def process_item(self, item, spider):
