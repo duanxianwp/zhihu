@@ -128,6 +128,7 @@ class MyRetryMiddleware(RetryMiddleware):
         if request.meta.get('dont_retry', False):
             return response
         if response.status in self.retry_http_codes:
+            # 干掉反爬验证码
             reason = response_status_message(response.status)
             time.sleep(random.randint(3, 5))
             return self._retry(request, reason, spider) or response
