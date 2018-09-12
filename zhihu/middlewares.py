@@ -13,6 +13,7 @@ from scrapy.downloadermiddlewares.retry import RetryMiddleware
 from scrapy.utils.response import response_status_message
 
 from zhihu.tools import ipTools
+from zhihu.tools.zhihuValidateCode import fuck_code
 
 
 class ZhihuSpiderMiddleware(object):
@@ -122,15 +123,17 @@ class MyRetryMiddleware(RetryMiddleware):
 
     def delete_proxy(self, proxy):
         if proxy:
-            ipTools.del_ip()
+           # ipTools.del_ip()
+            pass
 
     def process_response(self, request, response, spider):
         if request.meta.get('dont_retry', False):
             return response
         if response.status in self.retry_http_codes:
             # 干掉反爬验证码
-            reason = response_status_message(response.status)
+            fuck_code()
             time.sleep(random.randint(3, 5))
+            reason = response_status_message(response.status)
             return self._retry(request, reason, spider) or response
         return response
 

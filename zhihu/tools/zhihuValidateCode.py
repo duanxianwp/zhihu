@@ -38,6 +38,3 @@ def solve_code(img_base_64):
         return res['items'][0]['itemstring']
     except Exception:
         return "error"
-
-
-fuck_code()
